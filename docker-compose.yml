@@ -3,12 +3,51 @@ services:
    freeswitch:
      hostname: freeswitch
      container_name: freeswitch
-     network_mode: "host"
+     network_mode: 'host'
      restart: always
-     build: ./freeswitch
+    #  build: ./freeswitch
+     build:
+      context: ./freeswitch
+      dockerfile: Dockerfile.extra
+
      logging:
        options:
          max-size: 50m
+     environment:
+      - AWS_BUCKET=freeswitch-store-test
+      - AWS_REGION=ap-southeast-2
+      - AWS_ACCESS_ID=AKIAWPR7EWCGABRVQVZJ
+      - AWS_SECRET_KEY= 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
+      - DOMAIN=10.0.0.251
+      - FINN=http://10.0.0.251:3001
+      - FREESWITCH=http://10.0.0.251:3000
+      - AIDA=http://DOMAIN:8085
+      - AFFINITY=Freeswitch
+      - GOOGLE_APPLICATION_CREDENTIALS=/usr/local/freeswitch/google_key.json
+      - PATH=/usr/local/freeswitch/bin:PATH
+     ports:
+      - '5060:5060'
+      - '5061:5061'
+      - '5060:5060/udp'
+      - '5061:5061/udp'
+      - '5080:5080'
+      - '5081:5081'
+      - '5080:5080/udp'
+      - '5081:5081/udp'
+      - '6060:6060'
+      - '6061:6061'
+      - '6060:6060/udp'
+      - '6061:6061/udp'
+      - '16384-16394:16384-16394/udp'
+      - '8080:8080'
      volumes:
-      - ./freeswitch/conf:/usr/local/freeswitch/conf
-     tty: true
+      - ./freeswitch_configuration/conf:/usr/local/freeswitch/conf
+      - ./freeswitch_configuration/db:/usr/local/freeswitch/db
+      - ./freeswitch_configuration/log:/usr/local/freeswitch/log
+      - ./freeswitch_configuration/scripts:/usr/local/freeswitch/scripts
+      - ./freeswitch_configuration/store:/usr/local/freeswitch/store
+      - ./freeswitch_configuration/google_key.json:/usr/local/freeswitch/google_key.json
+      - ./freeswitch_tmp:/tmp
+
+     command: freeswitch -nonat -u freeswitch -g freeswitch -conf /usr/local/freeswitch/conf -log /usr/local/freeswitch/log -db /usr/local/freeswitch/db -scripts /usr/local/freeswitch/scripts -storage /usr/local/freeswitch/store
+    #  tty: true
