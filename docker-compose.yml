@@ -49,5 +49,5 @@ services:
       - ./freeswitch_configuration/google_key.json:/usr/local/freeswitch/google_key.json
       - ./freeswitch_tmp:/tmp
 
-     command: freeswitch -nonat -u freeswitch -g freeswitch -conf /usr/local/freeswitch/conf -log /usr/local/freeswitch/log -db /usr/local/freeswitch/db -scripts /usr/local/freeswitch/scripts -storage /usr/local/freeswitch/store
+     command: /usr/local/freswitch/bin/freeswitch -nonat -u freeswitch -g freeswitch -conf /usr/local/freeswitch/conf -log /usr/local/freeswitch/log -db /usr/local/freeswitch/db -scripts /usr/local/freeswitch/scripts -storage /usr/local/freeswitch/store
     #  tty: true
