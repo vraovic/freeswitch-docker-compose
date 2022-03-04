@@ -13,18 +13,8 @@ services:
      logging:
        options:
          max-size: 50m
-     environment:
-      - AWS_BUCKET=freeswitch-store-test
-      - AWS_REGION=ap-southeast-2
-      - AWS_ACCESS_ID=AKIAWPR7EWCGABRVQVZJ
-      - AWS_SECRET_KEY= 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
-      - DOMAIN=10.0.0.251
-      - FINN=http://10.0.0.251:3001
-      - FREESWITCH=http://10.0.0.251:3000
-      - AIDA=http://DOMAIN:8085
-      - AFFINITY=Freeswitch
-      - GOOGLE_APPLICATION_CREDENTIALS=/usr/local/freeswitch/google_key.json
-      - PATH=/usr/local/freeswitch/bin:PATH
+     env_file:
+       - .env-local
      ports:
       - '5060:5060'
       - '5061:5061'
