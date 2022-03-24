@@ -14,12 +14,16 @@ apt-get -y install libz-dev libjpeg-dev libsqlite3-dev libcurl4-openssl-dev libp
 apt-get -y install libspeex-dev libspeexdsp-dev libedit-dev libtiff-dev yasm haveged libldns-dev uuid-dev && \
 apt-get -y install libopus-dev libopusfile-dev libsndfile-dev libshout3-dev libmpg123-dev libmp3lame-dev && \
 \
-wget -O - https://files.freeswitch.org/repo/deb/debian-release/fsstretch-archive-keyring.asc | apt-key add - && \
-echo "deb http://files.freeswitch.org/repo/deb/debian-release/ `lsb_release -sc` main" | tee /etc/apt/sources.list.d/freeswitch.list && \
-echo "deb-src http://files.freeswitch.org/repo/deb/debian-release/ `lsb_release -sc` main" | tee -a /etc/apt/sources.list.d/freeswitch.list && \
-apt-get update && \
+TOKEN=pat_3zxJRNhMmoygoL4LUJ4Z3NQ6 && \
+\ 
+wget --http-user=signalwire --http-password=$TOKEN -O /usr/share/keyrings/signalwire-freeswitch-repo.gpg https://freeswitch.signalwire.com/repo/deb/debian-release/signalwire-freeswitch-repo.gpg && \
+echo "machine freeswitch.signalwire.com login signalwire password $TOKEN" | tee /etc/apt/auth.conf && \
+echo "deb [signed-by=/usr/share/keyrings/signalwire-freeswitch-repo.gpg] https://freeswitch.signalwire.com/repo/deb/debian-release/ `lsb_release -sc` main" | tee /etc/apt/sources.list.d/freeswitch.list && \
+echo "deb-src [signed-by=/usr/share/keyrings/signalwire-freeswitch-repo.gpg] https://freeswitch.signalwire.com/repo/deb/debian-release/ `lsb_release -sc` main" | tee -a /etc/apt/sources.list.d/freeswitch.list && \
+apt-get update && \ 
+# Install dependencies required for the build
 apt-get -y build-dep freeswitch && \
-\
+# then let's get the source. Use the -b flag to get a specific branch
 cd /usr/local/src && \
 git clone https://github.com/norwoodsystems/freeswitch.org -bv1.10.8 freeswitch && \
 \
